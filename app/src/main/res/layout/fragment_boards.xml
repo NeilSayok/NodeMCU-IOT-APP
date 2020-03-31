@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".UserHandling.Fragments.BoardsFragment">
+
+    <include
+        android:id="@+id/loading_layout"
+        layout="@layout/loading_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/boardRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/recycler_item_board">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu_animationDelayPerItem="50"
+        app:menu_backgroundColor="@android:color/transparent"
+        app:menu_buttonSpacing="0dp"
+        app:menu_colorNormal="@color/app_blue"
+        app:menu_colorPressed="@color/messenger_dark_blue"
+        app:menu_colorRipple="#99FFFFFF"
+        app:menu_fab_hide_animation="@anim/hide_to_bottom"
+        app:menu_fab_show_animation="@anim/show_from_bottom"
+        app:menu_fab_size="normal"
+        app:menu_icon="@drawable/fab_add"
+        app:menu_labels_colorNormal="#333333"
+        app:menu_labels_colorPressed="#444444"
+        app:menu_labels_colorRipple="#66FFFFFF"
+        app:menu_labels_cornerRadius="4dp"
+        app:menu_labels_ellipsize="none"
+        app:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        app:menu_labels_margin="0dp"
+        app:menu_labels_maxLines="-1"
+        app:menu_labels_padding="8dp"
+        app:menu_labels_paddingBottom="4dp"
+        app:menu_labels_paddingLeft="8dp"
+        app:menu_labels_paddingRight="8dp"
+        app:menu_labels_paddingTop="4dp"
+        app:menu_labels_position="left"
+        app:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        app:menu_labels_showShadow="true"
+        app:menu_labels_singleLine="false"
+        app:menu_labels_textColor="#FFFFFF"
+        app:menu_labels_textSize="14sp"
+        app:menu_openDirection="up"
+        app:menu_shadowColor="#66000000"
+        app:menu_shadowRadius="4dp"
+        app:menu_shadowXOffset="1dp"
+        app:menu_shadowYOffset="3dp"
+        app:menu_showShadow="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/scan_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_qr_code"
+            app:fab_label="Add board by scanning QR"
+            app:fab_size="mini"
+            app:fab_colorNormal="@color/whatsapp_light_green"
+            app:fab_colorPressed="@color/whatsapp_teal_green_light"
+            app:fab_colorRipple="#99FFFFFF"/>
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

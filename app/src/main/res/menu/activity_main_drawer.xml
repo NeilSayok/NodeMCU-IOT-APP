@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+
+        <item
+            android:id="@+id/boardsFragment"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/my_boards" />
+
+        <item
+            android:id="@+id/configureNewDeviceFragment"
+            android:icon="@drawable/nodemcu_logo"
+            android:title="Configure New Device" />
+
+
+    <group android:id="@+id/logout">
+        <item
+            android:id="@+id/logoutFragment"
+            android:icon="@android:drawable/ic_lock_power_off"
+            android:title="Logout" />
+
+    </group>
+</menu>

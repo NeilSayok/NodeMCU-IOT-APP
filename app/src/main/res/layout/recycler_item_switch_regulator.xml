@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switchFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/off_state"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:fabCustomSize="160dp"
+        app:fabSize="auto"
+        app:fab_size="mini"
+        app:layout_constraintEnd_toStartOf="@+id/guideline4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:color/transparent" />
+
+
+    <TextView
+        android:id="@+id/switchStateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="OFF"
+        android:textAllCaps="true"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/switchFab"
+        app:layout_constraintEnd_toEndOf="@+id/switchFab"
+        app:layout_constraintStart_toStartOf="@+id/switchFab"
+        app:layout_constraintTop_toTopOf="@+id/switchFab" />
+
+    <ImageView
+        android:id="@+id/switchStateIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="@+id/switchStateTV"
+        app:layout_constraintStart_toStartOf="@+id/switchStateTV"
+        app:layout_constraintTop_toBottomOf="@+id/switchStateTV"
+        app:srcCompat="@drawable/switch_state_off_drawable" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <com.sdsmdg.harjot.crollerTest.Croller
+        android:id="@+id/regulator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="24dp"
+        app:back_circle_color="#EDEDED"
+        app:indicator_color="#0B3C49"
+        app:indicator_width="10"
+        app:is_continuous="true"
+        app:label=""
+        app:label_color="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/switchFab"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
+        app:layout_constraintTop_toTopOf="@+id/switchFab"
+        app:main_circle_color="#FFFFFF"
+        app:max="100"
+        app:min="0"
+        app:progress_primary_color="#0B3C49"
+        app:progress_secondary_color="#EEEEEE"
+        app:start_offset="45" />
+
+    <TextView
+        android:id="@+id/regulator_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:text="0"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/regulator"
+        app:layout_constraintEnd_toEndOf="@+id/regulator"
+        app:layout_constraintStart_toStartOf="@+id/regulator"
+        app:layout_constraintTop_toTopOf="@+id/regulator" />
+
+    <TextView
+        android:id="@+id/lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="Lable"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchFab" />
+</androidx.constraintlayout.widget.ConstraintLayout>

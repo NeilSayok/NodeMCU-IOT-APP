@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:top="10dp">
+        <shape android:shape="rectangle">
+            <!-- view background color -->
+
+
+            <solid android:color="@android:color/white" />
+            <corners android:radius="200dp" />
+
+            <!-- If you want to add some padding -->
+            <padding
+                android:bottom="16dp"
+                android:top="24dp" />
+        </shape>
+    </item>
+</layer-list>

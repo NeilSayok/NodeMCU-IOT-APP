@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/off_state"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switchFab"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:color/transparent" />
+
+    <TextView
+        android:id="@+id/switchStateTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="6dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="OFF"
+        android:textAllCaps="true"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/switchFab"
+        app:layout_constraintEnd_toEndOf="@+id/switchFab"
+        app:layout_constraintStart_toStartOf="@+id/switchFab"
+        app:layout_constraintTop_toTopOf="@+id/switchFab" />
+
+    <ImageView
+        android:id="@+id/switchStateIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:elevation="6dp"
+        app:layout_constraintEnd_toEndOf="@+id/switchStateTV"
+        app:layout_constraintStart_toStartOf="@+id/switchStateTV"
+        app:layout_constraintTop_toBottomOf="@+id/switchStateTV"
+        app:srcCompat="@drawable/switch_state_off_drawable" />
+
+    <TextView
+        android:id="@+id/lable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_medium"
+        android:text="@string/label"
+        android:textColor="@android:color/black"
+        app:layout_constraintEnd_toEndOf="@+id/switchFab"
+        app:layout_constraintStart_toStartOf="@+id/switchFab"
+        app:layout_constraintTop_toBottomOf="@+id/switchFab" />
+</androidx.constraintlayout.widget.ConstraintLayout>

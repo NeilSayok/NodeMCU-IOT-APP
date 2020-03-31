@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_user_handling"
+    app:startDestination="@id/boardsFragment">
+
+    <fragment
+        android:id="@+id/boardsFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.BoardsFragment"
+        android:label="fragment_boards"
+        tools:layout="@layout/fragment_boards" >
+        <action
+            android:id="@+id/action_boardsFragment_to_addBoardDialog2"
+            app:destination="@id/addBoardDialog2" />
+        <action
+            android:id="@+id/action_boardsFragment_to_updateBoardDialog"
+            app:destination="@id/updateBoardDialog" />
+        <action
+            android:id="@+id/action_boardsFragment_to_boardItemFragment"
+            app:destination="@id/boardItemFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/addBoardDialog2"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.AddBoardDialog"
+        android:label="dialog_add_board"
+        tools:layout="@layout/dialog_add_board" >
+        <argument
+            android:name="board_table"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="ctrl_table"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="boardsCount"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </dialog>
+    <dialog
+        android:id="@+id/updateBoardDialog"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.UpdateBoardDialog"
+        android:label="dialog_update_board"
+        tools:layout="@layout/dialog_update_board" />
+    <fragment
+        android:id="@+id/boardItemFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.BoardItemFragment"
+        android:label="fragment_board_item"
+        tools:layout="@layout/fragment_board_item" />
+    <fragment
+        android:id="@+id/configureNewDeviceFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.ConfigureDeviceFragment"
+        android:label="ConfigureNewDeviceFragment" >
+        <action
+            android:id="@+id/action_configureNewDeviceFragment_to_setupNewBoardFragment"
+            app:destination="@id/setupNewBoardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/logoutFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.LogoutFragment"
+        android:label="LogoutFragment" />
+    <fragment
+        android:id="@+id/setupNewBoardFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.ConfigureNewDevices.UpdateDeviceSettingsLogin"
+        android:label="fragment_setup_new_board"
+        tools:layout="@layout/fragment_update_device_settings_login" >
+        <action
+            android:id="@+id/action_setupNewBoardFragment_to_updateDeviceSettings"
+            app:destination="@id/updateDeviceSettings" />
+    </fragment>
+    <fragment
+        android:id="@+id/updateDeviceSettings"
+        android:name="neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments.ConfigureNewDevices.UpdateDeviceSettings"
+        android:label="fragment_update_device_settings"
+        tools:layout="@layout/fragment_update_device_settings" >
+        <action
+            android:id="@+id/action_updateDeviceSettings_to_configureNewDeviceFragment"
+            app:destination="@id/configureNewDeviceFragment" />
+        <action
+            android:id="@+id/action_updateDeviceSettings_to_boardsFragment"
+            app:destination="@id/boardsFragment" />
+    </fragment>
+</navigation>

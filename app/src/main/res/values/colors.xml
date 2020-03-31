@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>-->
+
+    <color name="colorPrimary">#29B6F6</color>
+    <color name="colorPrimaryDark">#367cb8</color>
+    <color name="colorAccent">#fa3c4c</color>
+
+
+    <color name="whatsapp_teal_green_dark">#075E54</color>
+    <color name="whatsapp_teal_green_light">#128C7E</color>
+        <color name="whatsapp_light_green">#25D366</color>
+    <color name="whatsapp_faded_green">#DCF8C6</color>
+
+    <color name="whatsapp_greyish_pink">#ECE5DD</color>
+
+
+    <color name="messenger_red">#fa3c4c</color>
+    <color name="messenger_yellow">#ffc300</color>
+    <color name="messenger_purple">#d696bb</color>
+
+
+    <color name="stulish_light_white_a50">#7FFFFFFF</color>
+
+    <color name="app_dark_blue">#10bbb3</color>
+
+    <color name="app_pink">#F06292</color>
+
+    <color name="fb_login_st">#3a4499</color>
+    <color name="fb_login_en">#367cb8</color>
+    <color name="BackgroundtWhiteColor">#FFFFFF</color>
+    <color name="off_state">#32FF6969</color>
+    <color name="on_state">#3268E049</color>
+
+    68E049
+
+    <color name="whatsapp_check_mark_blue">#34B7F1</color>
+    <color name="messenger_dark_blue">#0078FF</color>
+    <color name="messenger_light_blue">#00C6ff</color>
+    <color name="stulish_light_blue">#10eeeb</color>
+    <color name="app_blue">#29B6F6</color>
+
+    <color name="off_white">#f9f1f1</color>
+</resources>

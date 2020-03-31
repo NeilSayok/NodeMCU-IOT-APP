@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/welcomeFragment">
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.WelcomeFragment"
+        android:label="fragment_welcome"
+        tools:layout="@layout/fragment_welcome" >
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginFragment3"
+            app:destination="@id/loginFragment3" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_signupStartFragment"
+            app:destination="@id/signupStartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment3"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment3_to_verifyAccountFragment"
+            app:destination="@id/verifyAccountFragment" />
+        <action
+            android:id="@+id/action_loginFragment3_to_signupStartFragment"
+            app:destination="@id/signupStartFragment" />
+        <action
+            android:id="@+id/action_loginFragment3_to_navigation_user_handling"
+            app:destination="@+id/navigation_user_handling" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupStartFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.SignupStartFragment"
+        android:label="fragment_signup_start"
+        tools:layout="@layout/fragment_signup_start" >
+        <action
+            android:id="@+id/action_signupStartFragment_to_signupNameFragment2"
+            app:destination="@id/signupNameFragment2"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_signupStartFragment_to_cancelSignupDialog2"
+            app:destination="@id/cancelSignupDialog2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupNameFragment2"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.SignupNameFragment"
+        android:label="fragment_signup_name"
+        tools:layout="@layout/fragment_signup_name" >
+        <action
+            android:id="@+id/action_signupNameFragment2_to_signupEmailFragment2"
+            app:destination="@id/signupEmailFragment2"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_signupNameFragment2_to_cancelSignupDialog2"
+            app:destination="@id/cancelSignupDialog2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupEmailFragment2"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.SignupEmailFragment"
+        android:label="fragment_signup_email"
+        tools:layout="@layout/fragment_signup_email" >
+        <action
+            android:id="@+id/action_signupEmailFragment2_to_signupPasswordFragment2"
+            app:destination="@id/signupPasswordFragment2"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_signupEmailFragment2_to_cancelSignupDialog2"
+            app:destination="@id/cancelSignupDialog2" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupPasswordFragment2"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.SignupPasswordFragment"
+        android:label="fragment_signup_choose_password"
+        tools:layout="@layout/fragment_signup_choose_password" >
+        <action
+            android:id="@+id/action_signupPasswordFragment2_to_signupCompleteFragment"
+            app:destination="@id/signupCompleteFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
+        <action
+            android:id="@+id/action_signupPasswordFragment2_to_cancelSignupDialog2"
+            app:destination="@id/cancelSignupDialog2" />
+    </fragment>
+    <dialog
+        android:id="@+id/cancelSignupDialog2"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.CancelSignupDialog"
+        android:label="dialog_cancel_account_creation"
+        tools:layout="@layout/dialog_cancel_account_creation" >
+        <action
+            android:id="@+id/action_cancelSignupDialog2_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </dialog>
+    <fragment
+        android:id="@+id/signupCompleteFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.SignupCompleteFragment"
+        android:label="fragment_signup_complete"
+        tools:layout="@layout/fragment_signup_complete" >
+        <action
+            android:id="@+id/action_signupCompleteFragment_to_cancelSignupDialog2"
+            app:destination="@id/cancelSignupDialog2" />
+        <action
+            android:id="@+id/action_signupCompleteFragment_to_verifyAccountFragment"
+            app:destination="@id/verifyAccountFragment" />
+        <action
+            android:id="@+id/action_signupCompleteFragment_to_signupEmailFragment2"
+            app:destination="@id/signupEmailFragment2" />
+        <action
+            android:id="@+id/action_signupCompleteFragment_to_welcomeFragment"
+            app:destination="@id/welcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/verifyAccountFragment"
+        android:name="neilsayok.github.nodemcuiotapptest2.SignupLogin.Fragments.VerifyAccountFragment"
+        android:label="fragment_verify_account"
+        tools:layout="@layout/fragment_verify_account" >
+        <action
+            android:id="@+id/action_verifyAccountFragment_to_navigation_user_handling"
+            app:destination="@id/navigation_user_handling" />
+    </fragment>
+    <include app:graph="@navigation/navigation_user_handling" />
+</navigation>

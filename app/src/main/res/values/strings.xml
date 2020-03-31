@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Smart Board</string>
+    <string name="next">Next</string>
+
+    <string name="policy_text"><![CDATA[<p>By tapping Sign Up, you agree to our<a href=\"https://github.com/NeilSayok/Escalade\"> Terms, Data Policy Cookies Policy</a>. You may receive Email notifications from and can opt out any time. Information from your device will be continuously uploaded to our servers so we can provide better service for you and others.</p>]]></string>
+    <string name="info_text"><![CDATA[<p>Info about contacts in your address book, including names, phone numbers and nicknames, will be sent to Facebook so we can suggest friends and provide and improve ads for you and others and offer a better service. You can turn this off in Settings and manage or delete contact info you share with Anomisity.<a href=\"https://github.com/NeilSayok/Escalade\"> Learn More</a></p>]]></string>
+    <string name="site_url">https://iot-cloud-nodemcu.000webhostapp.com/</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+
+    <string name="sharedPrefName">name</string>
+    <string name="sharedPrefEmail">email</string>
+    <string name="sharedPrefCtrl_table">ctrl_table</string>
+    <string name="sharedPrefLogged">logged</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label">Label</string>
+    <string name="my_boards">My Boards</string>
+    <string name="command_updateuserdetails">update_user_details</string>
+    <string name="command_getuserdetails">get_user_details</string>
+
+
+</resources>
