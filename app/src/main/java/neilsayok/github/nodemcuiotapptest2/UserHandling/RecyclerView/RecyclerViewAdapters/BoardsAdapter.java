@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import neilsayok.github.nodemcuiotapptest2.Extras.POJOs.ConfigItem;
 import neilsayok.github.nodemcuiotapptest2.MainActivity;
 import neilsayok.github.nodemcuiotapptest2.R;
 import neilsayok.github.nodemcuiotapptest2.Room.Entities.Board;
@@ -48,6 +49,25 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsViewHolder> {
     public void addBoard(Board b){
         boards.add(b);
         notifyDataSetChanged();
+    }
+
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void updateBoard(Board board){
+        Board b = null;
+        for (Board x : boards){
+            if(board.getBoardsTable().equals(x.getBoardsTable())){
+                b = x;
+                notifyDataSetChanged();
+                break;
+            }
+        }
+        if (b != null){
+            boards.set(boards.indexOf(b),board);
+        }
+
     }
 
     public void updateList(List<Board> boards){
@@ -90,6 +110,12 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsViewHolder> {
 
         }
 
+        if (b.isWifiDirectStat()){
+            holder.wifiDirectStat.setImageResource(R.drawable.switch_state_on_drawable);
+        }else {
+            holder.wifiDirectStat.setImageResource(R.drawable.switch_state_off_drawable);
+        }
+
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -109,6 +135,17 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsViewHolder> {
                 Bundle bundle = new Bundle();
                 bundle.putString("board_table",b.getBoardsTable());
                 bundle.putString("board_name",b.getBoardName());
+                if (b.isWifiDirectStat() && BoardsFragment.items != null && !BoardsFragment.items.isEmpty()) {
+                    for (ConfigItem i : BoardsFragment.items) {
+                        if (i.getName().contains(b.getBoardsTable())) {
+                            bundle.putString("ip", i.getIp());
+                            bundle.putInt("port", i.getPort());
+                            break;
+                        }
+                    }
+                }
+
+
                 navController.navigate(R.id.action_boardsFragment_to_boardItemFragment,bundle);
             }
         });

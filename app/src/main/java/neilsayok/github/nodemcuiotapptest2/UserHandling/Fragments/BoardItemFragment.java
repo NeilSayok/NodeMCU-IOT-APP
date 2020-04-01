@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextClock;
 
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 
+import neilsayok.github.nodemcuiotapptest2.Extras.TCPClient;
 import neilsayok.github.nodemcuiotapptest2.MainActivity;
 import neilsayok.github.nodemcuiotapptest2.R;
 import neilsayok.github.nodemcuiotapptest2.Room.Entities.BoardItems;
@@ -37,6 +39,8 @@ public class BoardItemFragment extends Fragment {
     private BoardItemAdapter itemAdapter;
     private List<BoardItems> boardItems;
     private NavController navController;
+    private TCPClient client;
+    private TCPClient.OnMessageReceivedListener messageReceivedListener;
 
 
 
@@ -58,6 +62,8 @@ public class BoardItemFragment extends Fragment {
 
         MainActivity.getToolbar().setTitle(getArguments().getString("board_name",this.getClass().getName()));
 
+
+
         recyclerView = view.findViewById(R.id.boardsItemRecyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
         boardItems = new ArrayList<>();
@@ -75,6 +81,8 @@ public class BoardItemFragment extends Fragment {
                         itemAdapter.notifyDataSetChanged();
                     }
                 });
+
+
     }
 
 

@@ -18,12 +18,19 @@ public class Board {
     private String imgUrl;
     @ColumnInfo
     private String boardsTable;
+    @ColumnInfo
+    private boolean wifiDirectStat;
+    @ColumnInfo
+    private boolean httpDirectStat;
+
 
 
     public Board(String boardName, String imgUrl, String boardsTable) {
         this.boardName = boardName;
         this.imgUrl = imgUrl;
         this.boardsTable = boardsTable;
+        this.wifiDirectStat = false;
+        this.httpDirectStat = false;
     }
 
     public String getBoardName() {
@@ -56,5 +63,21 @@ public class Board {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean isWifiDirectStat() {
+        return wifiDirectStat;
+    }
+
+    public void setWifiDirectStat(boolean wifiDirectStat) {
+        this.wifiDirectStat = wifiDirectStat;
+    }
+
+    public boolean isHttpDirectStat() {
+        return httpDirectStat;
+    }
+
+    public void setHttpDirectStat(boolean httpDirectStat) {
+        this.httpDirectStat = httpDirectStat;
     }
 }

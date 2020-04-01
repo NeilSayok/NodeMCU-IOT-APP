@@ -1,11 +1,16 @@
 package neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.Log;
@@ -48,11 +53,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import neilsayok.github.nodemcuiotapptest2.Extras.POJOs.ConfigItem;
 import neilsayok.github.nodemcuiotapptest2.MainActivity;
 import neilsayok.github.nodemcuiotapptest2.R;
 import neilsayok.github.nodemcuiotapptest2.Room.Entities.Board;
@@ -60,6 +69,7 @@ import neilsayok.github.nodemcuiotapptest2.Room.Entities.BoardItems;
 import neilsayok.github.nodemcuiotapptest2.UserHandling.Activities.QRScannerActivity;
 import neilsayok.github.nodemcuiotapptest2.UserHandling.RecyclerView.Helpers.BoardsRecyclerItemTouchHelper;
 import neilsayok.github.nodemcuiotapptest2.UserHandling.RecyclerView.RecyclerViewAdapters.BoardsAdapter;
+import neilsayok.github.nodemcuiotapptest2.UserHandling.RecyclerView.RecyclerViewAdapters.ConfigBoardAdapter;
 import neilsayok.github.nodemcuiotapptest2.UserHandling.RecyclerView.ViewHolders.BoardsViewHolder;
 import neilsayok.github.nodemcuiotapptest2.Extras.VolleySingleton;
 
@@ -88,6 +98,31 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
     private Runnable runnable;
 
 
+    //Latest
+    private static final int ADD_SERVICE = 1;
+    private static final int REMOVE_SERVICE = 2;
+    private static final int TIMER_MSG = 3;
+    private static final long DISCOVERY_TIMER=1000;
+    private boolean discoveryActive=false;
+    private NsdManager.DiscoveryListener discoveryListener;
+    private ArrayList<NsdServiceInfo> resolveQueue;
+    private long lastResolveStart=0;
+    private static final long RESOLVE_TIMEOUT=10000;
+    private boolean resolveRunning=false;
+    //private RecyclerView configItemsRV;
+    private long startSequence=0;
+    private String SERVICE_TYPE = "_http._tcp.";
+    private NsdManager nsdManager;
+    //private String TAG = "ConfigureNewDeviceFragment";
+    //private ConfigBoardAdapter adapter;
+    public static List<ConfigItem> items;
+    private Handler handlerNSD;
+    private Handler checConnectStatHandler;
+    private Runnable checkConnectionStatRunnable;
+
+    //Latest
+
+
 
     public static void setLoadingLayoutVisibility(int Visibility){
         view.findViewById(R.id.loading_layout).setVisibility(Visibility);
@@ -97,6 +132,37 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_boards, container, false);
+        resolveQueue = new ArrayList<>();
+        checConnectStatHandler = new Handler();
+        checkConnectionStatRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (items!= null && items.size() > 0){
+                    if (boardsAdapter!=null){
+                        if (boardsAdapter.getBoards() != null && boardsAdapter.getBoards().size() > 0){
+                            for (Board bi : boardsAdapter.getBoards()){
+                                for (ConfigItem ci : items){
+                                   // Log.d("wifi direct"+ ci.getName(),"test"+bi.getBoardsTable());
+
+                                    if (ci.getName().contains(bi.getBoardsTable())){
+
+                                        bi.setWifiDirectStat(true);
+                                        boardsAdapter.updateBoard(bi);
+                                        boardsAdapter.notifyDataSetChanged();
+                                        break;
+                                    }else {
+
+                                        bi.setWifiDirectStat(false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //TODO Check if is alive using Rest
+                checConnectStatHandler.postDelayed(checkConnectionStatRunnable,0);
+            }
+        };
         return view;
     }
 
@@ -129,12 +195,13 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
 
         url = siteUrl + "get-boards-count.php?ctrl_table="
                 + MainActivity.getSharedPreferences().getString(getString(R.string.sharedPrefCtrl_table), "");
-
+        nsdManager = (NsdManager)getContext().getSystemService(Context.NSD_SERVICE);
         sharedPrefEmail = getString(R.string.sharedPrefEmail);
 
         setPermissionListeners();
 
         scanQr.setOnClickListener(onClickListener);
+        items = new ArrayList<>();
 
 
         MainActivity.getAppDB().boardsDao().getBoards().observe(getViewLifecycleOwner(), new Observer<List<Board>>() {
@@ -158,7 +225,203 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
 
         handler.post(runnable);
 
+        handlerNSD = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                switch (msg.what){
+                    case ADD_SERVICE:
+                        addItem((ConfigItem)msg.obj);
+                        break;
+                    case REMOVE_SERVICE:
+                        removeService((String)msg.obj);
+                        Log.d("Remove service",(String)msg.obj);
+                        break;
+                    case TIMER_MSG:
+                        Long seq=(Long)msg.obj;
+                        if (seq != startSequence) return;
+                        startTimer();
+                        resolveNext();
+                        break;
+
+                }
+            }
+        };
+        checConnectStatHandler.post(checkConnectionStatRunnable);
+
+
     }
+
+
+    @Override
+    public void onStop() {
+        stopScan();
+        handler.removeCallbacks(runnable);
+        super.onStop();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        scan();
+        Log.d("Starting from here","onStart");
+    }
+
+    private void startTimer(){
+        Message nextTimer= handlerNSD.obtainMessage(TIMER_MSG,startSequence);
+        handlerNSD.sendMessageDelayed(nextTimer,DISCOVERY_TIMER);
+    }
+
+    private void scan(){
+        startSequence++;
+        if (discoveryActive) {
+            nsdManager.stopServiceDiscovery(discoveryListener);
+            discoveryActive=false;
+        }
+        initializeDiscoveryListener();
+        items = new ArrayList<>();
+        //.setItems(items);
+        nsdManager.discoverServices(
+                SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, discoveryListener);
+        discoveryActive=true;
+        startTimer();
+    }
+
+    private void stopScan(){
+        if (discoveryActive) {
+            nsdManager.stopServiceDiscovery(discoveryListener);
+        }
+        discoveryActive=false;
+        startSequence++;
+    }
+
+    private void addItem(ConfigItem item){
+        if (items.size() > 0 || item != null){
+            for(ConfigItem i : items){
+                if (i.getUri().toString().equals(item.getUri().toString()))
+                    return;
+            }
+        }
+        items.add(item);
+    }
+
+    private void removeService(String name){
+        List<ConfigItem> removeItems=new ArrayList<>();
+        for (ConfigItem item : items){
+            if (item.getName().equals(name)){
+                removeItems.add(item);
+            }
+        }
+        for (ConfigItem item:removeItems){
+            items.remove(item);
+        }
+    }
+
+    private void resolveService(final NsdServiceInfo service) {
+        resolveQueue.add(service);
+    }
+
+    private synchronized void resolveDone(){
+        resolveRunning=false;
+    }
+
+    private synchronized void resolveNext(){
+        if (resolveQueue.size()<1 ) return;
+        long now=System.currentTimeMillis();
+        if (resolveRunning){
+            if ((lastResolveStart+RESOLVE_TIMEOUT) < now){
+                resolveRunning=false;
+            }
+            else return;
+        }
+        NsdServiceInfo service=resolveQueue.remove(0);
+        resolveRunning=true;
+        lastResolveStart=now;
+        nsdManager.resolveService(service, new NsdManager.ResolveListener() {
+            @Override
+            public void onResolveFailed(NsdServiceInfo nsdServiceInfo, int i) {
+                resolveDone();
+                Log.e("PRFX","resolve failed for "+nsdServiceInfo.getServiceName()+": "+Integer.toString(i));
+            }
+
+            @Override
+            public void onServiceResolved(NsdServiceInfo nsdServiceInfo) {
+                resolveDone();
+                Log.d("Resolve", "Done");
+                ConfigItem item=new ConfigItem();
+                item.setName(nsdServiceInfo.getServiceName());
+                item.setHost(nsdServiceInfo.getHost().getHostName());
+                try {
+                    item.setUri(new URI("http",null,nsdServiceInfo.getHost().getHostAddress(),nsdServiceInfo.getPort(),null,null,null));
+                    item.setIp(nsdServiceInfo.getHost().getHostAddress());
+                    item.setPort(nsdServiceInfo.getPort());
+                    Message targetMessage= handlerNSD.obtainMessage(ADD_SERVICE,item);
+                    targetMessage.sendToTarget();
+                    Log.d(item.getName(), item.getIp());
+                    Log.d(item.getName(), String.valueOf(item.getPort()));
+
+                } catch (URISyntaxException e) {
+                    Log.e("PRFX",e.getMessage());
+                }
+            }
+        });
+    }
+
+
+    public void initializeDiscoveryListener() {
+
+        // Instantiate a new DiscoveryListener
+        discoveryListener = new NsdManager.DiscoveryListener() {
+
+            // Called as soon as service discovery begins.
+            @Override
+            public void onDiscoveryStarted(String regType) {
+                Log.d("PRFX", "Service discovery started");
+            }
+
+            @Override
+            public void onServiceFound(NsdServiceInfo service) {
+                // A service was found! Do something with it.
+                Log.d("PRFX", "Service discovery success " + service);
+                if (!service.getServiceType().equals(SERVICE_TYPE)) {
+                    return;
+                }
+                resolveService(service);
+
+            }
+
+
+
+            @Override
+            public void onServiceLost(NsdServiceInfo service) {
+                // When the network service is no longer available.
+                // Internal bookkeeping code goes here.
+                Log.e("PRFX", "service lost: " + service);
+                Message targetMessage= handlerNSD.obtainMessage(REMOVE_SERVICE,service.getServiceName());
+                Log.d("Service Name", service.getServiceName());
+                targetMessage.sendToTarget();
+            }
+
+            @Override
+            public void onDiscoveryStopped(String serviceType) {
+                Log.i("PRFX", "Discovery stopped: " + serviceType);
+            }
+
+            @Override
+            public void onStartDiscoveryFailed(String serviceType, int errorCode) {
+                Log.e("PRFX", "Discovery failed: Error code:" + errorCode);
+                stopScan();
+            }
+
+            @Override
+            public void onStopDiscoveryFailed(String serviceType, int errorCode) {
+                Log.e("PRFX", "Discovery failed: Error code:" + errorCode);
+                nsdManager.stopServiceDiscovery(this);
+            }
+        };
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -385,11 +648,6 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        handler.removeCallbacks(runnable);
-    }
 }
 
 

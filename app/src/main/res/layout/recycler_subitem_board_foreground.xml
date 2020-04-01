@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,13 +26,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:fontFamily="@font/roboto_medium"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/board_img"
         app:layout_constraintStart_toEndOf="@+id/board_img"
         app:layout_constraintTop_toTopOf="@+id/board_img"
-        tools:text="Board 1"
-        android:fontFamily="@font/roboto_medium"
-        android:textSize="20sp"
-        android:textColor="@android:color/black"/>
+        tools:text="Board 1" />
+
+    <ImageView
+        android:id="@+id/wifiDirectStat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/switch_state_off_drawable" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/httpditectStat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:srcCompat="@drawable/switch_state_off_drawable" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="WIFI Direct"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/wifiDirectStat"
+        app:layout_constraintEnd_toStartOf="@+id/wifiDirectStat"
+        app:layout_constraintTop_toTopOf="@+id/wifiDirectStat" />
+
+    <TextView
+        android:id="@+id/textView25"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/roboto_light"
+        android:text="HTTP"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/httpditectStat"
+        app:layout_constraintEnd_toStartOf="@+id/httpditectStat"
+        app:layout_constraintTop_toTopOf="@+id/httpditectStat" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

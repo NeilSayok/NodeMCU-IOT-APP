@@ -11,7 +11,7 @@ import neilsayok.github.nodemcuiotapptest2.Room.DAOs.BoardsDAO;
 import neilsayok.github.nodemcuiotapptest2.Room.Entities.Board;
 import neilsayok.github.nodemcuiotapptest2.Room.Entities.BoardItems;
 
-@Database(entities = {Board.class,BoardItems.class},version = 2,exportSchema = false)
+@Database(entities = {Board.class,BoardItems.class},version = 3,exportSchema = false)
 public abstract class MyAppDataBase extends RoomDatabase {
     public static final String DB_NAME = "app_database";
     private static MyAppDataBase instance;

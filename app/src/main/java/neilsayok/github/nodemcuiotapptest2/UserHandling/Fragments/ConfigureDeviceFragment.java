@@ -23,7 +23,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fondesa.recyclerviewdivider.RecyclerViewDivider;
 
-import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -47,27 +46,16 @@ public class ConfigureDeviceFragment extends Fragment {
     private long lastResolveStart=0;
     private static final long RESOLVE_TIMEOUT=10000;
     private boolean resolveRunning=false;
-
     private RecyclerView configItemsRV;
     private NavController navController;
-
-
     private long startSequence=0;
-
-
     private View view;
-    private String SERVICE_NAME = "Client Device";
     private String SERVICE_TYPE = "_http._tcp.";
-
-    private InetAddress hostAddress;
-    private int hostPort;
     private NsdManager nsdManager;
     private String TAG = "ConfigureNewDeviceFragment";
-
-    private Handler handler;
-
+    private Handler handlerNSD;
     private ConfigBoardAdapter adapter;
-    private List<ConfigItem> items;
+    private static List<ConfigItem> items;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
@@ -77,6 +65,8 @@ public class ConfigureDeviceFragment extends Fragment {
         items = new ArrayList<>();
         return view;
     }
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -94,7 +84,7 @@ public class ConfigureDeviceFragment extends Fragment {
         configItemsRV.setItemAnimator(new DefaultItemAnimator());
         RecyclerViewDivider.with(getContext()).build().addTo(configItemsRV);
 
-        handler = new Handler(Looper.getMainLooper()){
+        handlerNSD = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
@@ -133,8 +123,8 @@ public class ConfigureDeviceFragment extends Fragment {
     }
 
     private void startTimer(){
-        Message nextTimer=handler.obtainMessage(TIMER_MSG,startSequence);
-        handler.sendMessageDelayed(nextTimer,DISCOVERY_TIMER);
+        Message nextTimer= handlerNSD.obtainMessage(TIMER_MSG,startSequence);
+        handlerNSD.sendMessageDelayed(nextTimer,DISCOVERY_TIMER);
     }
 
     private void scan(){
@@ -221,7 +211,7 @@ public class ConfigureDeviceFragment extends Fragment {
                     item.setUri(new URI("http",null,nsdServiceInfo.getHost().getHostAddress(),nsdServiceInfo.getPort(),null,null,null));
                     item.setIp(nsdServiceInfo.getHost().getHostAddress());
                     item.setPort(nsdServiceInfo.getPort());
-                    Message targetMessage=handler.obtainMessage(ADD_SERVICE,item);
+                    Message targetMessage= handlerNSD.obtainMessage(ADD_SERVICE,item);
                     targetMessage.sendToTarget();
                     Log.d(item.getName(), item.getIp());
                     Log.d(item.getName(), String.valueOf(item.getPort()));
@@ -261,7 +251,7 @@ public class ConfigureDeviceFragment extends Fragment {
                 // When the network service is no longer available.
                 // Internal bookkeeping code goes here.
                 Log.e("PRFX", "service lost: " + service);
-                Message targetMessage=handler.obtainMessage(REMOVE_SERVICE,service.getServiceName());
+                Message targetMessage= handlerNSD.obtainMessage(REMOVE_SERVICE,service.getServiceName());
                 Log.d("Service Name", service.getServiceName());
                 targetMessage.sendToTarget();
             }
