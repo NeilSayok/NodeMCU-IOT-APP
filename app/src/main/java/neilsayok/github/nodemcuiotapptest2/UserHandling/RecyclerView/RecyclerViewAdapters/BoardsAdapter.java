@@ -116,6 +116,12 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsViewHolder> {
             holder.wifiDirectStat.setImageResource(R.drawable.switch_state_off_drawable);
         }
 
+        if (b.isHttpDirectStat()){
+            holder.httpDirectStat.setImageResource(R.drawable.switch_state_on_drawable);
+        }else {
+            holder.httpDirectStat.setImageResource(R.drawable.switch_state_off_drawable);
+        }
+
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -144,6 +150,8 @@ public class BoardsAdapter extends RecyclerView.Adapter<BoardsViewHolder> {
                         }
                     }
                 }
+
+
 
 
                 navController.navigate(R.id.action_boardsFragment_to_boardItemFragment,bundle);

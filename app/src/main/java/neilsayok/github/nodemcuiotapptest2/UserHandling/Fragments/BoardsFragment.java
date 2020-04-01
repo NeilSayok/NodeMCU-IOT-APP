@@ -2,6 +2,7 @@ package neilsayok.github.nodemcuiotapptest2.UserHandling.Fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.nsd.NsdManager;
@@ -19,8 +20,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavController;
@@ -29,6 +32,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 
 import com.android.volley.AuthFailureError;
@@ -85,7 +89,7 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
 
     private PermissionListener composite;
 
-    private String url;
+    private String url,checkOnlineStatUrl;
     private String siteUrl;
     private String sharedPrefEmail;
 
@@ -119,6 +123,8 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
     private Handler handlerNSD;
     private Handler checConnectStatHandler;
     private Runnable checkConnectionStatRunnable;
+    private SwipeRefreshLayout swipeContainer;
+
 
     //Latest
 
@@ -179,6 +185,18 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
         scanQr = view.findViewById(R.id.scan_qr);
         recyclerView = view.findViewById(R.id.boardRecyclerView);
 
+        swipeContainer = (SwipeRefreshLayout) view.findViewById(R.id.swipeContainer);
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Intent i = new Intent(getActivity(),MainActivity.class);
+                startActivity(i);
+                getActivity().finish();
+            }
+        });
+
+
+
         navController = Navigation.findNavController(Objects.requireNonNull(getActivity()),R.id.welcome_nav_host_fragment);
         boardsAdapter = new BoardsAdapter(getContext(),null,navController);
         MainActivity.getToolbar().setTitle(getContext().getString(R.string.my_boards));
@@ -194,6 +212,8 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
         siteUrl = getString(R.string.site_url);
 
         url = siteUrl + "get-boards-count.php?ctrl_table="
+                + MainActivity.getSharedPreferences().getString(getString(R.string.sharedPrefCtrl_table), "");
+        checkOnlineStatUrl = siteUrl + "get-status-for-ctrl-table.php?ctrl_table="
                 + MainActivity.getSharedPreferences().getString(getString(R.string.sharedPrefCtrl_table), "");
         nsdManager = (NsdManager)getContext().getSystemService(Context.NSD_SERVICE);
         sharedPrefEmail = getString(R.string.sharedPrefEmail);
@@ -583,6 +603,47 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
             }
         });
         VolleySingleton.getmInstance(getContext()).addToRequestQue(stringRequest);
+
+
+
+        stringRequest = new StringRequest(Request.Method.GET, checkOnlineStatUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray statReply = new JSONArray(response);
+                    Log.d("checkOnlinestat",response);
+                    JSONObject jsonObject;
+                    for(int i = 0; i < statReply.length();i++){
+                        jsonObject = statReply.getJSONObject(i);
+                        for (Board b : boardsAdapter.getBoards()){
+                            if (b.getBoardsTable().equals(jsonObject.getString("board_table"))){
+                                if (jsonObject.getString("online_stat").equals("0")){
+                                    b.setHttpDirectStat(false);
+                                    boardsAdapter.updateBoard(b);
+                                    boardsAdapter.notifyDataSetChanged();
+                                }else {
+                                    b.setHttpDirectStat(true);
+                                    boardsAdapter.updateBoard(b);
+                                    boardsAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        if (code == FROMBACKGROUNDTHREAD)
+        VolleySingleton.getmInstance(getContext()).addToRequestQue(stringRequest);
+
+
     }
 
 
@@ -647,6 +708,47 @@ public class BoardsFragment extends Fragment implements BoardsRecyclerItemTouchH
 
         }
     }
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requireActivity().getOnBackPressedDispatcher().addCallback(this,onBackPressedCallback);
+    }
+
+    OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+
+            Log.d("HEre","back");
+
+            alertDialogBuilder.setPositiveButton("YES",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().finish();
+                        }
+                    });
+            alertDialogBuilder.setNegativeButton("NO",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+            alertDialogBuilder.setTitle("Do you want to exit?");
+            alertDialogBuilder.setMessage("Press yes to exit the app.");
+            alertDialogBuilder.setCancelable(true);
+            alertDialogBuilder.setIcon(R.mipmap.ic_launcher_round);
+
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        }
+    };
+
 
 }
 
